@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Navbar } from './components/Navbar';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import {scroller,Element} from 'react-scroll';
 
 function App() {
   const [formInputs, setFormInputs] = useState([
@@ -34,6 +35,11 @@ function App() {
     })
       .then(res => res.json())
       .then(setResult);
+    scroller.scrollTo("result", {
+      duration: 500,
+      smooth: true,
+      offset: -10
+    });
   };
 
   const handlePrev = (e) => {
@@ -55,67 +61,69 @@ function App() {
     <div className="bg-gray-50 min-h-screen text-gray-900">
       <Navbar />
       <main className="max-w-4xl mx-auto p-6">
-        <form
-          className="bg-white p-6 rounded-xl shadow-lg space-y-6 border border-gray-200"
-          onSubmit={handleSubmit}
-        >
-          <h3 className="text-2xl font-semibold text-blue-600">Resource Input</h3>
+        <div className='h-screen'>
+          <form
+            className="bg-white p-6 rounded-xl shadow-lg space-y-6 border border-gray-200"
+            onSubmit={handleSubmit}
+          >
+            <h3 className="text-2xl font-semibold text-blue-600">Resource Input</h3>
 
-          <div>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={formInputs[currentResourceId].id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
+            <div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={formInputs[currentResourceId].id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Input
+                    i={formInputs[currentResourceId].id}
+                    handleChange={handleChange}
+                    value={formInputs[currentResourceId]}
+                  />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <div className="flex justify-center gap-4">
+              <button
+                className="p-3 rounded-full bg-gray-200 hover:bg-gray-300 transition"
+                onClick={handlePrev}
               >
-                <Input
-                  i={formInputs[currentResourceId].id}
-                  handleChange={handleChange}
-                  value={formInputs[currentResourceId]}
-                />
-              </motion.div>
-            </AnimatePresence>
-          </div>
+                <FiChevronLeft size={20} />
+              </button>
+              <button
+                className="p-3 rounded-full bg-gray-200 hover:bg-gray-300 transition"
+                onClick={handleNext}
+              >
+                <FiChevronRight size={20} />
+              </button>
+            </div>
 
-          <div className="flex justify-center gap-4">
-            <button
-              className="p-3 rounded-full bg-gray-200 hover:bg-gray-300 transition"
-              onClick={handlePrev}
-            >
-              <FiChevronLeft size={20} />
-            </button>
-            <button
-              className="p-3 rounded-full bg-gray-200 hover:bg-gray-300 transition"
-              onClick={handleNext}
-            >
-              <FiChevronRight size={20} />
-            </button>
-          </div>
+            <div className="flex justify-center gap-2">
+              {formInputs.map((_, index) => (
+                <span
+                  key={index}
+                  className={`w-3 h-3 rounded-full ${
+                    index === currentResourceId ? 'bg-blue-500' : 'bg-gray-400'
+                  }`}
+                ></span>
+              ))}
+            </div>
 
-          <div className="flex justify-center gap-2">
-            {formInputs.map((_, index) => (
-              <span
-                key={index}
-                className={`w-3 h-3 rounded-full ${
-                  index === currentResourceId ? 'bg-blue-500' : 'bg-gray-400'
-                }`}
-              ></span>
-            ))}
-          </div>
-
-          <div className="flex justify-center">
-            <button
-              type="submit"
-              className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-md transition"
-            >
-              Submit
-            </button>
-          </div>
-        </form>
-
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-md transition"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
         {result?.resources && (
+          <Element name='result' className='h-screen p-10'>
   <div className="mt-8 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
     <div className="bg-blue-600 text-white px-6 py-4">
       <h2 className="text-lg font-semibold">Pricing Details</h2>
@@ -149,6 +157,7 @@ function App() {
       </span>
     </div>
   </div>
+  </Element>
 )}
 
       </main>
