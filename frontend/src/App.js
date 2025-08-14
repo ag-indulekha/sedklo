@@ -1,10 +1,10 @@
 import Input from './components/Input';
-import Add from './components/Add';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Navbar } from './components/Navbar';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiTrash2 
+ } from 'react-icons/fi';
 import {scroller,Element} from 'react-scroll';
 
 function App() {
@@ -35,11 +35,6 @@ function App() {
     })
       .then(res => res.json())
       .then(setResult);
-    scroller.scrollTo("result", {
-      duration: 500,
-      smooth: true,
-      offset: -10
-    });
   };
 
   const handlePrev = (e) => {
@@ -57,11 +52,54 @@ function App() {
     }
   };
 
+  const handleRemove = (id,e) => {
+    const updatedInputs = formInputs.filter(input => input.id!==id);
+    setFormInputs(updatedInputs);
+     if (updatedInputs.length === 0) {
+    const newInput = { id: uuidv4(), resourceType: '', resourceSubType: '', quantity: '', region: '' };
+    setFormInputs([newInput]);
+    setCurrentResourceId(0);
+    return;
+  }
+    if(currentResourceId>=updatedInputs.length)
+      setCurrentResourceId(updatedInputs.length-1);
+    
+  }
+
+  useEffect(() => {
+  if(result?.resources){
+    scroller.scrollTo("result", {
+      duration: 500,
+      smooth: true,
+      offset: -10
+    });
+  }
+}, [result]);
+
+  const handleClear = () => {
+  // Reset the form to initial state
+  const newInput = { id: uuidv4(), resourceType: '', resourceSubType: '', quantity: '', region: '' };
+  setFormInputs([newInput]);
+  setCurrentResourceId(0);
+  setResult({}); // clear results
+
+  // Scroll back to top of the form
+  scroller.scrollTo("formTop", {
+    duration: 500,
+    smooth: true,
+    offset: -10
+  });
+};
+
+
   return (
+     <Element name='formTop'>
     <div className="bg-gray-50 min-h-screen text-gray-900">
       <Navbar />
+     
       <main className="max-w-4xl mx-auto p-6">
         <div className='h-screen'>
+          
           <form
             className="bg-white p-6 rounded-xl shadow-lg space-y-6 border border-gray-200"
             onSubmit={handleSubmit}
@@ -81,6 +119,7 @@ function App() {
                     i={formInputs[currentResourceId].id}
                     handleChange={handleChange}
                     value={formInputs[currentResourceId]}
+                    handleRemove={handleRemove}
                   />
                 </motion.div>
               </AnimatePresence>
@@ -121,6 +160,7 @@ function App() {
               </button>
             </div>
           </form>
+         
         </div>
         {result?.resources && (
           <Element name='result' className='h-screen p-10'>
@@ -156,12 +196,23 @@ function App() {
         ₹{result.resources.reduce((sum, r) => sum + (r.totalPrice || 0), 0).toLocaleString("en-IN")}
       </span>
     </div>
+    <div className="flex justify-end mt-4">
   </div>
+    
+  </div>
+  <button
+    className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow-md transition mt-10"
+    onClick={handleClear}
+  >
+    Reset
+  </button>
   </Element>
 )}
 
       </main>
+      
     </div>
+     </Element>
   );
 }
 

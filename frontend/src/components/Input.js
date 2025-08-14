@@ -1,4 +1,6 @@
-const Input = ({ i, handleChange, value }) => {
+import { FiTrash2 } from 'react-icons/fi';
+
+const Input = ({ i, handleChange, value, handleRemove }) => {
   const resourceSubType = {
     Compute: ['CPU - General Purpose', 'GPU - NVIDIA T4', 'High Memory Instance'],
     Database: ['MySQL', 'PostgreSQL', 'MongoDB'],
@@ -6,7 +8,17 @@ const Input = ({ i, handleChange, value }) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="relative space-y-4 bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-md">
+      {/* Remove Button */}
+      <button
+        type="button"
+        onClick={(e) => handleRemove(i, e)}
+        className="absolute top-3 right-3 text-red-500 hover:text-red-600 transition"
+      >
+        <FiTrash2 size={22} />
+      </button>
+
+      {/* Resource Type */}
       <div>
         <label className="block mb-1 text-sm text-gray-700 font-medium">Resource Type</label>
         <select
@@ -21,6 +33,7 @@ const Input = ({ i, handleChange, value }) => {
         </select>
       </div>
 
+      {/* Resource Sub-Type */}
       {value.resourceType && (
         <div>
           <label className="block mb-1 text-sm text-gray-700 font-medium">Resource Sub-Type</label>
@@ -36,6 +49,7 @@ const Input = ({ i, handleChange, value }) => {
         </div>
       )}
 
+      {/* Quantity */}
       <div>
         <label className="block mb-1 text-sm text-gray-700 font-medium">Number of Units</label>
         <input
@@ -47,6 +61,7 @@ const Input = ({ i, handleChange, value }) => {
         />
       </div>
 
+      {/* Region */}
       <div>
         <label className="block mb-1 text-sm text-gray-700 font-medium">Region</label>
         <select
