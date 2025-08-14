@@ -60,3 +60,7 @@ A **full-stack web application** that helps users estimate cloud resource costs 
 2. Fill in the resource type, sub-type, quantity, and region.
 3. Use the Next/Prev buttons to navigate between multiple resources.
 4. Click Submit to see the pricing breakdown at the bottom in a bill-style format.
+
+## Demo Video 
+[Watch Demo Video](demo-video/demo-video.webm)
+
