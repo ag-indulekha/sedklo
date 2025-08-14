@@ -39,5 +39,24 @@ A **full-stack web application** that helps users estimate cloud resource costs 
 ### Backend
 1. Clone the repository:
    ```bash
-   git clone <repo-url>
+   git clone https://github.com/ag-indulekha/sedklo.git
    cd backend
+2. Build and run Spring Boot
+   ```bash
+   ./mvnw spring-boot:run
+### Frontend
+1. Navigate to the frontend library
+   ```bash
+   cd frontend
+2. Install dependencies
+   ```bash
+   npm install
+3. Start the react development server
+   ```bash
+   npm run start
+
+## Usage
+1. Open the app in your browser.
+2. Fill in the resource type, sub-type, quantity, and region.
+3. Use the Next/Prev buttons to navigate between multiple resources.
+4. Click Submit to see the pricing breakdown at the bottom in a bill-style format.
